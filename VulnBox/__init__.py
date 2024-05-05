@@ -23,17 +23,17 @@ def start_VulnBox(VulnBox_NAME):
 		try:
 			# Download and extract the VulnBox file
 			with zipfile.ZipFile(BytesIO(requests.get("https://github.com/truocphan/VulnBox/releases/download/"+VulnBox_NAME+"/"+VulnBox_NAME+".zip").content)) as zipObject: zipObject.extractall(path=VulnBoxDir)
-		except zipfile.BadZipFile:
-			exit("\x1b[1;31m[-] xxxxxx\x1b[1;0m")
-		except requests.exceptions.ConnectTimeout:
-			exit("\x1b[1;31m[-] yyyy\x1b[1;0m")
+		except zipfile.BadZipfile:
+			exit("\x1b[1;31m[-] The \""+VulnBox_NAME+"\" is not available at VulnBox.\x1b[1;0m")
+		except (requests.exceptions.ConnectionError, requests.exceptions.ConnectTimeout):
+			exit("\x1b[1;31m[-] Network connection problem. Please check your network connection and try again.\x1b[1;0m")
 
 	try:
 		# Start VulnBox
-		os.system("docker compose -f "+BoxComposeFile+" up")
+		os.system("docker-compose -f "+BoxComposeFile+" up")
 	except KeyboardInterrupt:
 		# Stop VulnBox and clear volumn
-		os.system("docker compose -f "+BoxComposeFile+" down -v")
+		os.system("docker-compose -f "+BoxComposeFile+" down -v")
 
 
 def main():
