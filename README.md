@@ -30,5 +30,25 @@ python setup.py install
 
 ## Basic Usage
 ```
-TP-VulnBox --help
+> TP-VulnBox --help
+
+ ____   ____        __            ______
+|_  _| |_  _|      [  |          |_   _ \
+  \ \   / /__   _   | |  _ .--.    | |_) |   .--.   _   __
+   \ \ / /[  | | |  | | [ `.-. |   |  __'. / .'`\ \[ \ [  ]
+    \ ' /  | \_/ |, | |  | | | |  _| |__) || \__. | > '  <
+     \_/   '.__.'_/[___][___||__]|_______/  '.__.' [__]`\_]
+
+
+usage: TP-VulnBox [-h] [--list-all] [--start-VulnBox VulnBox_NAME]
+
+options:
+  -h, --help            show this help message and exit
+  --list-all            Lists all available VulnBoxes
+  --start-VulnBox VulnBox_NAME
+                        Run the new VulnBox (e.g. CVE-2023-51412)
+
+VulnBox is a container that is intentionally designed with vulnerabilities to allow security professionals to practice
+and improve their offensive security skills, such as penetration testing and vulnerability assessment.
+
 ```
