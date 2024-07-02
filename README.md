@@ -40,13 +40,15 @@ python setup.py install
      \_/   '.__.'_/[___][___||__]|_______/  '.__.' [__]`\_]
 
 
-usage: TP-VulnBox [-h] [--list-all] [--start-VulnBox VulnBox_NAME]
+usage: TP-VulnBox [-h] [--list-all] [--start VulnBox_NAME] [--run VulnBox_NAME] [--delete VulnBox_NAME]
 
 options:
   -h, --help            show this help message and exit
   --list-all            Lists all available VulnBoxes
-  --start-VulnBox VulnBox_NAME
-                        Run the new VulnBox (e.g. CVE-2023-51412)
+  --start VulnBox_NAME  Download and run the new VulnBox (e.g. CVE-2024-31211)
+  --run VulnBox_NAME    Run an existing VulnBox or run a new VulnBox if not already downloaded (e.g. CVE-2024-31211)
+  --delete VulnBox_NAME
+                        Delete downloaded VulnBox (e.g. CVE-2024-31211)
 
 VulnBox is a container that is intentionally designed with vulnerabilities to allow security professionals to practice
 and improve their offensive security skills, such as penetration testing and vulnerability assessment.

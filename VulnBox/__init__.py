@@ -1,6 +1,6 @@
 import argparse
 import requests
-import os
+import os, shutil
 from io import BytesIO
 import zipfile
 
@@ -16,7 +16,29 @@ def List_All_VulnBox():
 	print("")
 
 
-def start_VulnBox(VulnBox_NAME):
+def Start_VulnBox(VulnBox_NAME):
+	BoxNameDir = os.path.join(VulnBoxDir, VulnBox_NAME)
+	BoxComposeFile = os.path.join(VulnBoxDir, VulnBox_NAME, "docker-compose.yaml")
+
+	if os.path.isdir(BoxNameDir): shutil.rmtree(BoxNameDir)
+
+	try:
+		# Download and extract the VulnBox file
+		with zipfile.ZipFile(BytesIO(requests.get("https://github.com/truocphan/VulnBox/releases/download/"+VulnBox_NAME+"/"+VulnBox_NAME+".zip").content)) as zipObject: zipObject.extractall(path=VulnBoxDir)
+	except zipfile.BadZipfile:
+		exit("\x1b[1;31m[-] The \""+VulnBox_NAME+"\" is not available at VulnBox.\x1b[1;0m")
+	except (requests.exceptions.ConnectionError, requests.exceptions.ConnectTimeout):
+		exit("\x1b[1;31m[-] Network connection problem. Please check your network connection and try again.\x1b[1;0m")
+
+	try:
+		# Start VulnBox
+		os.system("docker-compose -f "+BoxComposeFile+" up")
+	except KeyboardInterrupt:
+		# Stop VulnBox and clear volumn
+		os.system("docker-compose -f "+BoxComposeFile+" down -v")
+
+
+def Run_VulnBox(VulnBox_NAME):
 	BoxComposeFile = os.path.join(VulnBoxDir, VulnBox_NAME, "docker-compose.yaml")
 
 	if not os.path.isfile(BoxComposeFile):
@@ -34,6 +56,16 @@ def start_VulnBox(VulnBox_NAME):
 	except KeyboardInterrupt:
 		# Stop VulnBox and clear volumn
 		os.system("docker-compose -f "+BoxComposeFile+" down -v")
+
+
+def Delete_VulnBox(VulnBox_NAME):
+	BoxNameDir = os.path.join(VulnBoxDir, VulnBox_NAME)
+
+	if os.path.isdir(BoxNameDir):
+		shutil.rmtree(BoxNameDir)
+		print("[+] The VulnBox name \"\x1b[1;32m"+VulnBox_NAME+"\x1b[1;0m\" has been successfully removed.")
+	else:
+		print("\x1b[1;31m[-] The VulnBox name \""+VulnBox_NAME+"\" does not exist.\x1b[1;0m")
 
 
 def main():
@@ -54,13 +86,19 @@ def main():
 	parser = argparse.ArgumentParser(prog="TP-VulnBox",
 		epilog="\x1b[1;33mVulnBox is a container that is intentionally designed with vulnerabilities to allow security professionals to practice and improve their offensive security skills, such as penetration testing and vulnerability assessment.\x1b[1;0m")
 	parser.add_argument("--list-all", action="store_true", help="Lists all available VulnBoxes")
-	parser.add_argument("--start-VulnBox", metavar="VulnBox_NAME", type=str, help="Run the new VulnBox (e.g. CVE-2023-51412)")
+	parser.add_argument("--start", metavar="VulnBox_NAME", type=str, help="Download and run the new VulnBox (e.g. CVE-2024-31211)")
+	parser.add_argument("--run", metavar="VulnBox_NAME", type=str, help="Run an existing VulnBox or run a new VulnBox if not already downloaded (e.g. CVE-2024-31211)")
+	parser.add_argument("--delete", metavar="VulnBox_NAME", type=str, help="Delete downloaded VulnBox (e.g. CVE-2024-31211)")
 	args = parser.parse_args()
 
 	if args.list_all:
 		List_All_VulnBox()
-	elif args.start_VulnBox:
-		start_VulnBox(args.start_VulnBox)
+	elif args.start:
+		Start_VulnBox(args.start.replace("/", "").replace("\\", "").replace("..", ""))
+	elif args.run:
+		Run_VulnBox(args.run.replace("/", "").replace("\\", "").replace("..", ""))
+	elif args.delete:
+		Delete_VulnBox(args.delete.replace("/", "").replace("\\", "").replace("..", ""))
 	else:
 		parser.print_help()
 
