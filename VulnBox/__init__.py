@@ -24,7 +24,10 @@ def Start_VulnBox(VulnBox_NAME):
 
 	try:
 		# Download and extract the VulnBox file
-		with zipfile.ZipFile(BytesIO(requests.get("https://github.com/truocphan/VulnBox/releases/download/"+VulnBox_NAME+"/"+VulnBox_NAME+".zip").content)) as zipObject: zipObject.extractall(path=VulnBoxDir)
+		if VulnBox_NAME == "WP-XDEBUG":
+			with zipfile.ZipFile(BytesIO(requests.get("https://github.com/truocphan/TP-VulnBox/releases/download/"+VulnBox_NAME+"/"+VulnBox_NAME+".zip").content)) as zipObject: zipObject.extractall(path=VulnBoxDir)
+		else:
+			with zipfile.ZipFile(BytesIO(requests.get("https://github.com/truocphan/VulnBox/releases/download/"+VulnBox_NAME+"/"+VulnBox_NAME+".zip").content)) as zipObject: zipObject.extractall(path=VulnBoxDir)
 	except zipfile.BadZipfile:
 		exit("\x1b[1;31m[-] The \""+VulnBox_NAME+"\" is not available at VulnBox.\x1b[1;0m")
 	except (requests.exceptions.ConnectionError, requests.exceptions.ConnectTimeout):
@@ -44,7 +47,10 @@ def Run_VulnBox(VulnBox_NAME):
 	if not os.path.isfile(BoxComposeFile):
 		try:
 			# Download and extract the VulnBox file
-			with zipfile.ZipFile(BytesIO(requests.get("https://github.com/truocphan/VulnBox/releases/download/"+VulnBox_NAME+"/"+VulnBox_NAME+".zip").content)) as zipObject: zipObject.extractall(path=VulnBoxDir)
+			if VulnBox_NAME == "WP-XDEBUG":
+				with zipfile.ZipFile(BytesIO(requests.get("https://github.com/truocphan/TP-VulnBox/releases/download/"+VulnBox_NAME+"/"+VulnBox_NAME+".zip").content)) as zipObject: zipObject.extractall(path=VulnBoxDir)
+			else:
+				with zipfile.ZipFile(BytesIO(requests.get("https://github.com/truocphan/VulnBox/releases/download/"+VulnBox_NAME+"/"+VulnBox_NAME+".zip").content)) as zipObject: zipObject.extractall(path=VulnBoxDir)
 		except zipfile.BadZipfile:
 			exit("\x1b[1;31m[-] The \""+VulnBox_NAME+"\" is not available at VulnBox.\x1b[1;0m")
 		except (requests.exceptions.ConnectionError, requests.exceptions.ConnectTimeout):
