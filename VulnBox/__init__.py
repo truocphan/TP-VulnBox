@@ -3,6 +3,26 @@ import requests
 import os, shutil
 from io import BytesIO
 import zipfile
+from tqdm import tqdm
+
+
+def download_and_extract_zip(VulnBox_NAME, VulnBoxDir):
+	url = "https://github.com/truocphan/"+("TP-VulnBox" if VulnBox_NAME == "WP-XDEBUG" else "VulnBox")+"/releases/download/"+VulnBox_NAME+"/"+VulnBox_NAME+".zip"
+
+	response = requests.get(url, stream=True)
+	total_size = int(response.headers.get("content-length", 0))
+	block_size = 1024
+	progress_bar = tqdm(desc=" Downloading... {}.zip".format(VulnBox_NAME), total=total_size, unit="iB", unit_scale=True)
+
+	buffer = BytesIO()
+	for data in response.iter_content(block_size):
+		buffer.write(data)
+		progress_bar.update(len(data))
+
+	progress_bar.close()
+
+	with zipfile.ZipFile(buffer) as zipObject: zipObject.extractall(path=VulnBoxDir)
+	print("\n")
 
 
 def List_All_VulnBox():
@@ -10,7 +30,10 @@ def List_All_VulnBox():
 		print("\x1b[32m[*] List of all available VulnBoxes:\x1b[0m")
 		res = requests.get("https://api.github.com/repos/truocphan/VulnBox/releases").json()
 		for release in res:
-			print("- \x1b[1;35m" + release["name"].split(":",1)[0] + "\x1b[1;0m:" + release["name"].split(":",1)[1])
+			try:
+				print("- \x1b[1;35m" + release["name"].split(":",1)[0] + "\x1b[1;0m:" + release["name"].split(":",1)[1])
+			except Exception as e:
+				pass
 	except Exception as e:
 		pass
 	print("")
@@ -23,11 +46,7 @@ def Start_VulnBox(VulnBox_NAME):
 	if os.path.isdir(BoxNameDir): shutil.rmtree(BoxNameDir)
 
 	try:
-		# Download and extract the VulnBox file
-		if VulnBox_NAME == "WP-XDEBUG":
-			with zipfile.ZipFile(BytesIO(requests.get("https://github.com/truocphan/TP-VulnBox/releases/download/"+VulnBox_NAME+"/"+VulnBox_NAME+".zip").content)) as zipObject: zipObject.extractall(path=VulnBoxDir)
-		else:
-			with zipfile.ZipFile(BytesIO(requests.get("https://github.com/truocphan/VulnBox/releases/download/"+VulnBox_NAME+"/"+VulnBox_NAME+".zip").content)) as zipObject: zipObject.extractall(path=VulnBoxDir)
+		download_and_extract_zip(VulnBox_NAME, VulnBoxDir)
 	except zipfile.BadZipfile:
 		exit("\x1b[1;31m[-] The \""+VulnBox_NAME+"\" is not available at VulnBox.\x1b[1;0m")
 	except (requests.exceptions.ConnectionError, requests.exceptions.ConnectTimeout):
@@ -46,11 +65,7 @@ def Run_VulnBox(VulnBox_NAME):
 
 	if not os.path.isfile(BoxComposeFile):
 		try:
-			# Download and extract the VulnBox file
-			if VulnBox_NAME == "WP-XDEBUG":
-				with zipfile.ZipFile(BytesIO(requests.get("https://github.com/truocphan/TP-VulnBox/releases/download/"+VulnBox_NAME+"/"+VulnBox_NAME+".zip").content)) as zipObject: zipObject.extractall(path=VulnBoxDir)
-			else:
-				with zipfile.ZipFile(BytesIO(requests.get("https://github.com/truocphan/VulnBox/releases/download/"+VulnBox_NAME+"/"+VulnBox_NAME+".zip").content)) as zipObject: zipObject.extractall(path=VulnBoxDir)
+			download_and_extract_zip(VulnBox_NAME, VulnBoxDir)
 		except zipfile.BadZipfile:
 			exit("\x1b[1;31m[-] The \""+VulnBox_NAME+"\" is not available at VulnBox.\x1b[1;0m")
 		except (requests.exceptions.ConnectionError, requests.exceptions.ConnectTimeout):
