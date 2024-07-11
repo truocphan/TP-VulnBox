@@ -1,6 +1,7 @@
 import argparse
 import requests
-import os, shutil
+import os, sys, subprocess, shutil
+import re
 from io import BytesIO
 import zipfile
 from tqdm import tqdm
@@ -89,6 +90,14 @@ def Delete_VulnBox(VulnBox_NAME):
 		print("\x1b[1;31m[-] The VulnBox name \""+VulnBox_NAME+"\" does not exist.\x1b[1;0m")
 
 
+def Update(): os.system("{} -W ignore -m pip install TP-VulnBox --upgrade".format(sys.executable))
+
+def Current_Version():
+	p = subprocess.Popen("{} -W ignore -m pip show TP-VulnBox".format(sys.executable), stdout=subprocess.PIPE, shell=True)
+	(output, err) = p.communicate()
+	version = re.findall("Version: (\\d{4}\\.\\d{,2}\\.\\d{,2})", output.decode())[0]
+	print(" The current version of TP-VulnBox running is \x1b[0;32m{}\x1b[0;0m".format(version))
+
 def main():
 	global VulnBoxDir
 	VulnBoxDir = os.path.join(os.path.expanduser("~"), "PyPI-VulnBox")
@@ -104,12 +113,13 @@ def main():
                                                            
 """+"\x1b[1;0m")
 
-	parser = argparse.ArgumentParser(prog="TP-VulnBox",
-		epilog="\x1b[1;33mVulnBox is a container that is intentionally designed with vulnerabilities to allow security professionals to practice and improve their offensive security skills, such as penetration testing and vulnerability assessment.\x1b[1;0m")
+	parser = argparse.ArgumentParser(prog="TP-VulnBox", epilog="\x1b[0;33mVulnBox is a container that is intentionally designed with vulnerabilities to allow security professionals to practice and improve their offensive security skills, such as penetration testing and vulnerability assessment.\x1b[0;0m")
 	parser.add_argument("--list-all", action="store_true", help="Lists all available VulnBoxes")
 	parser.add_argument("--start", metavar="VulnBox_NAME", type=str, help="Download and run the new VulnBox (e.g. CVE-2024-31211)")
 	parser.add_argument("--run", metavar="VulnBox_NAME", type=str, help="Run an existing VulnBox or run a new VulnBox if not already downloaded (e.g. CVE-2024-31211)")
 	parser.add_argument("--delete", metavar="VulnBox_NAME", type=str, help="Delete downloaded VulnBox (e.g. CVE-2024-31211)")
+	parser.add_argument("--update", action="store_true", help="Update TP-VulnBox to the latest version")
+	parser.add_argument("--version", action="store_true", help="Print the current version of TP-VulnBox")
 	args = parser.parse_args()
 
 	if args.list_all:
@@ -120,6 +130,10 @@ def main():
 		Run_VulnBox(args.run.replace("/", "").replace("\\", "").replace("..", ""))
 	elif args.delete:
 		Delete_VulnBox(args.delete.replace("/", "").replace("\\", "").replace("..", ""))
+	elif args.update:
+		Update()
+	elif args.version:
+		Current_Version()
 	else:
 		parser.print_help()
 
