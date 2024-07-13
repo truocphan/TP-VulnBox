@@ -2,7 +2,7 @@ import setuptools
 
 setuptools.setup(
 	name = "TP-VulnBox",
-	version = "2024.7.11",
+	version = "2024.7.13",
 	author = "TP Cyber Security",
 	license = "MIT",
 	author_email = "tpcybersec2023@gmail.com",

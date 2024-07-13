@@ -41,6 +41,9 @@ def List_All_VulnBox():
 
 
 def Start_VulnBox(VulnBox_NAME):
+	global VulnBoxDir
+	if VulnBox_NAME == "WP-XDEBUG": VulnBoxDir = os.path.join(os.path.expanduser("~"), "Desktop")
+
 	BoxNameDir = os.path.join(VulnBoxDir, VulnBox_NAME)
 	BoxComposeFile = os.path.join(VulnBoxDir, VulnBox_NAME, "docker-compose.yaml")
 
@@ -62,6 +65,9 @@ def Start_VulnBox(VulnBox_NAME):
 
 
 def Run_VulnBox(VulnBox_NAME):
+	global VulnBoxDir
+	if VulnBox_NAME == "WP-XDEBUG": VulnBoxDir = os.path.join(os.path.expanduser("~"), "Desktop")
+
 	BoxComposeFile = os.path.join(VulnBoxDir, VulnBox_NAME, "docker-compose.yaml")
 
 	if not os.path.isfile(BoxComposeFile):
@@ -81,6 +87,9 @@ def Run_VulnBox(VulnBox_NAME):
 
 
 def Delete_VulnBox(VulnBox_NAME):
+	global VulnBoxDir
+	if VulnBox_NAME == "WP-XDEBUG": VulnBoxDir = os.path.join(os.path.expanduser("~"), "Desktop")
+
 	BoxNameDir = os.path.join(VulnBoxDir, VulnBox_NAME)
 
 	if os.path.isdir(BoxNameDir):

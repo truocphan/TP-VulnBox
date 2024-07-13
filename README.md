@@ -1,7 +1,7 @@
 # TP-VulnBox
 
 <p align="center">
-    <a href="https://github.com/truocphan/TP-VulnBox/releases/"><img src="https://img.shields.io/github/release/truocphan/TP-VulnBox" height=30></a>
+	<a href="https://github.com/truocphan/TP-VulnBox/releases/"><img src="https://img.shields.io/github/release/truocphan/TP-VulnBox" height=30></a>
 	<a href="#"><img src="https://img.shields.io/github/downloads/truocphan/TP-VulnBox/total" height=30></a>
 	<a href="#"><img src="https://img.shields.io/github/stars/truocphan/TP-VulnBox" height=30></a>
 	<a href="#"><img src="https://img.shields.io/github/forks/truocphan/TP-VulnBox" height=30></a>
@@ -40,7 +40,7 @@ python setup.py install
      \_/   '.__.'_/[___][___||__]|_______/  '.__.' [__]`\_]
 
 
-usage: TP-VulnBox [-h] [--list-all] [--start VulnBox_NAME] [--run VulnBox_NAME] [--delete VulnBox_NAME]
+usage: TP-VulnBox [-h] [--list-all] [--start VulnBox_NAME] [--run VulnBox_NAME] [--delete VulnBox_NAME] [--update] [--version]
 
 options:
   -h, --help            show this help message and exit
@@ -49,8 +49,10 @@ options:
   --run VulnBox_NAME    Run an existing VulnBox or run a new VulnBox if not already downloaded (e.g. CVE-2024-31211)
   --delete VulnBox_NAME
                         Delete downloaded VulnBox (e.g. CVE-2024-31211)
+  --update              Update TP-VulnBox to the latest version
+  --version             Print the current version of TP-VulnBox
 
-VulnBox is a container that is intentionally designed with vulnerabilities to allow security professionals to practice
-and improve their offensive security skills, such as penetration testing and vulnerability assessment.
+VulnBox is a container that is intentionally designed with vulnerabilities to allow security professionals to practice and improve their
+offensive security skills, such as penetration testing and vulnerability assessment.
 
 ```
