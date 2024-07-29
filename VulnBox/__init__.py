@@ -32,7 +32,9 @@ def List_All_VulnBox():
 		res = requests.get("https://api.github.com/repos/truocphan/VulnBox/releases").json()
 		for release in res:
 			try:
-				print("- \x1b[1;35m" + release["name"].split(":",1)[0] + "\x1b[1;0m:" + release["name"].split(":",1)[1])
+				VulnBox_NAME = release["name"].split(":",1)[0]
+				VulnBox_TITLE = release["name"].split(":",1)[1]
+				print("- \x1b[1;35m" + VulnBox_NAME + "\x1b[1;0m:" + VulnBox_TITLE + (" ( \x1b[33mDownloaded\x1b[0;0m )" if VulnBox_NAME in os.listdir(os.path.join(os.path.expanduser("~"), "PyPI-VulnBox")) else ""))
 			except Exception as e:
 				pass
 	except Exception as e:
